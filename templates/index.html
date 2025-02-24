@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block title %}Inicio - Mi Proyecto Flask{% endblock %}
+
+{% block content %}
+<h2>¡Hola! Bienvenido a mi Proyecto Web</h2>
+<form action="{{ url_for('usuario') }}" method="post">
+    <label for="nombre">Ingresa tu nombre:</label>
+    <input type="text" id="nombre" name="nombre" required>
+    <input type="submit" value="Enviar">
+</form>
+{% endblock %}
