@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="es">
+<head><link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+
+    <meta charset="UTF-8">
+    <title>Formulario</title>
+</head>
+<body>
+    <h2>Ingrese sus datos</h2>
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        <p>{{ form.nombre.label }} {{ form.nombre() }}</p>
+        <p>{{ form.apellido.label }} {{ form.apellido() }}</p>
+        <p>{{ form.submit() }}</p>
+    </form>
+</body>
+</html>

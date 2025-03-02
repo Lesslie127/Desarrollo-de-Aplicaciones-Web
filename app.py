@@ -1,20 +1,23 @@
-from flask import Flask, request, render_template
+from flask import Flask, render_template, request
+from flask_wtf import FlaskForm
+from wtforms import StringField, SubmitField
+from wtforms.validators import DataRequired
 
-app = Flask(__name__, template_folder="templates", static_folder="static")
-app.config['TEMPLATES_AUTO_RELOAD'] = True
+app = Flask(__name__, template_folder="templates")
+app.config['SECRET_KEY'] = 'clave_secreta'
 
-@app.route('/')
-def home():
-    return render_template('index.html')
+class SimpleForm(FlaskForm):
+    nombre = StringField('Nombre', validators=[DataRequired()])
+    apellido = StringField('Apellido', validators=[DataRequired()])
+    submit = SubmitField('Enviar')
 
-@app.route('/usuario', methods=['POST'])
-def usuario():
-    nombre = request.form['nombre']
-    return render_template('usuario.html', nombre=nombre)
-
-@app.route('/about')
-def about():
-    return render_template('about.html')
+@app.route('/', methods=['GET', 'POST'])
+def formulario():
+    form = SimpleForm()
+    if form.validate_on_submit():
+        return render_template('resultado.html', nombre=form.nombre.data, apellido=form.apellido.data)
+    return render_template('formulario.html', form=form)
 
 if __name__ == '__main__':
     app.run(debug=True)
+
