@@ -1,43 +1,117 @@
+/* Estilos generales */
 body {
     font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
+    background-color: #e0f7fa;
+    color: #0277bd;
+    margin: 0;
+    padding: 0;
+}
+
+/* Encabezado */
+header {
+    background-color: #81d4fa;
+    padding: 20px;
     text-align: center;
-    margin: 50px;
+}
+
+h1 {
+    font-size: 2.5em;
+    color: #01579b;
+}
+
+/* Barra de navegación */
+nav ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline-block;
+    margin: 0 15px;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: #0277bd;
+    font-size: 1.2em;
+}
+
+nav ul li a:hover {
+    color: #01579b;
+}
+
+/* Contenido principal */
+main {
+    padding: 20px;
 }
 
 h2 {
-    color: #333;
+    font-size: 2em;
+    color: #0288d1;
 }
 
+/* Formulario */
 form {
-    background: white;
+    background-color: #b3e5fc;
     padding: 20px;
     border-radius: 8px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-    display: inline-block;
 }
 
-p {
+label {
+    font-size: 1.2em;
+    color: #01579b;
+}
+
+input, textarea {
+    width: 100%;
+    padding: 10px;
     margin: 10px 0;
-}
-
-input {
-    padding: 8px;
-    width: 200px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+    border: 2px solid #0288d1;
+    border-radius: 4px;
 }
 
 button {
-    background-color: #28a745;
+    background-color: #03a9f4;
     color: white;
-    padding: 10px 15px;
+    padding: 10px 20px;
     border: none;
-    border-radius: 5px;
+    border-radius: 4px;
     cursor: pointer;
 }
 
 button:hover {
-    background-color: #218838;
+    background-color: #0288d1;
+}
+
+/* Flash messages */
+.flash {
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 4px;
+}
+
+.flash.success {
+    background-color: #81c784;
+    color: white;
+}
+
+.flash.warning {
+    background-color: #ffb74d;
+    color: white;
+}
+
+/* Pie de página */
+footer {
+    background-color: #81d4fa;
+    text-align: center;
+    padding: 10px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+footer p {
+    margin: 0;
+    color: #01579b;
 }
 
