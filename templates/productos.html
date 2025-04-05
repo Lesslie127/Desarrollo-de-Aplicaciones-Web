@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}Lista de Productos{% endblock %}
+
+{% block content %}
+<h2 class="text-center mb-4">Productos</h2>
+<a href="{{ url_for('crear_producto') }}" class="btn btn-primary mb-3" style="background-color: #924dc1;">Crear Producto</a>
+<table class="table table-striped table-bordered table-hover table-sm">
+    <thead class="thead-dark">
+        <tr>
+            <th>Nombre</th>
+            <th>Precio</th>
+            <th>Stock</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for producto in productos %}
+        <tr>
+            <td>{{ producto['nombre'] }}</td>
+            <td>${{ "%.2f"|format(producto['precio']) }}</td>
+            <td>{{ producto['stock'] }}</td>
+            <td>
+                <a href="{{ url_for('editar_producto', id_producto=producto['id_producto']) }}" class="btn btn-warning btn-sm">Editar</a>
+                <form method="POST" action="{{ url_for('eliminar_producto', id_producto=producto['id_producto']) }}" style="display:inline;">
+                    <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

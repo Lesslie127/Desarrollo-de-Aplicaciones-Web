@@ -1,12 +1,20 @@
 {% extends "base.html" %}
 
-{% block title %}Inicio - Mi Proyecto Flask{% endblock %}
+{% block title %}Inicio{% endblock %}
 
 {% block content %}
 <h2>¡Hola! Bienvenido a mi Proyecto Web</h2>
+
+<!-- Formulario que ya tenías -->
 <form action="{{ url_for('formulario') }}" method="post">
     <label for="nombre">Ingresa tu nombre:</label>
     <input type="text" id="nombre" name="nombre" required>
     <input type="submit" value="Enviar">
 </form>
+
+<!-- Botones de Login y Registro -->
+<div class="button-container">
+    <button onclick="window.location.href='/registro'" class="btn" id="btn-registro">Registro</button>
+    <button onclick="window.location.href='/login'" class="btn" id="btn-login">Iniciar sesión</button>
+</div>
 {% endblock %}

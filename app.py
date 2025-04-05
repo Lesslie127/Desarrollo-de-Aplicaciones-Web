@@ -1,11 +1,12 @@
-from flask import Flask, render_template, request, redirect, url_for, flash, session, jsonify
-from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField
-from wtforms.validators import DataRequired, Length, Email, EqualTo
-from Conexion.conexion import obtener_conexion
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from Models.models import Usuario
+from Models.modelsp import Producto
+from flask import Flask, render_template, request, redirect, url_for, flash, session,  jsonify
+from flask_wtf import FlaskForm
+from wtforms import StringField, SubmitField
+from wtforms.validators import DataRequired, Length
+from Conexion.conexion import obtener_conexion
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'mi_secreto_seguro'  # Necesario para formularios con CSRF
@@ -16,21 +17,8 @@ login_manager.init_app(app)
 login_manager.login_view = 'login'
 
 # Definir la clase de formulario
-class RegistroForm(FlaskForm):
-    nombre = StringField('Nombre', validators=[DataRequired(), Length(min=2, max=50)])
-    email = StringField('Correo Electrónico', validators=[DataRequired(), Email()])
-    password = PasswordField('Contraseña', validators=[DataRequired()])
-    confirm_password = PasswordField('Confirmar Contraseña', validators=[DataRequired(), EqualTo('password')])
-    submit = SubmitField('Registrar')
-
-class LoginForm(FlaskForm):
-    email = StringField('Correo Electrónico', validators=[DataRequired(), Email()])
-    password = PasswordField('Contraseña', validators=[DataRequired()])
-    submit = SubmitField('Iniciar sesión')
-
-# Definir el formulario para el nombre (el formulario de inicio)
 class NombreForm(FlaskForm):
-    nombre = StringField('Nombre', validators=[DataRequired()])
+    nombre = StringField('Ingresa tu nombre', validators=[DataRequired(), Length(min=2, max=50)])
     submit = SubmitField('Enviar')
 
 # Ruta principal (Página de inicio)
@@ -45,73 +33,158 @@ def formulario():
     if form.validate_on_submit():
         session['nombre'] = form.nombre.data  # Guardar en sesión
         flash('Formulario enviado con éxito!', 'success')
-        return redirect(url_for('about'))  # Redirigir a la página "Acerca de"
-    return render_template('index.html', form=form)
+        return redirect(url_for('resultado'))
+    return render_template('formulario.html', form=form)
 
-# Ruta para la página "Acerca de" (Bienvenida)
+# Ruta para mostrar el resultado
+@app.route('/resultado')
+def resultado():
+    nombre = session.get('nombre', None)  # Obtener de sesión
+
+    if nombre is None:  # Evita errores si no se ha llenado el formulario
+        flash('No hay datos en la sesión. Ingresa tu nombre en el formulario.', 'warning')
+        return redirect(url_for('formulario'))
+
+    return render_template('resultado.html', nombre=nombre)
 @app.route('/about')
 def about():
-    nombre = session.get('nombre')  # Obtener el nombre desde la sesión
-    if not nombre:
-        flash('Por favor, ingresa tu nombre primero.', 'warning')
-        return redirect(url_for('formulario'))
-    return render_template('about.html', nombre=nombre)
+    return render_template('about.html')
 
-# Ruta para registrar usuarios
+@app.route('/test_db')
+def test_db():
+    conexion = obtener_conexion()
+    if conexion:
+        return "Conexión exitosa a MySQL"
+    else:
+        return "Error en la conexión a MySQL"
+
+# Ruta para obtener todos los usuarios de la base de datos
+@app.route('/usuarios', methods=['GET'])
+def obtener_usuarios():
+    conexion = obtener_conexion()
+    if conexion:
+        cursor = conexion.cursor(dictionary=True)  # Para obtener los resultados en formato de diccionario
+        cursor.execute("SELECT * FROM usurios")
+        usuarios = cursor.fetchall()
+        cursor.close()
+        conexion.close()
+        return jsonify(usuarios)  # Retornar los datos en formato JSON
+    else:
+        return jsonify({"error": "No se pudo conectar a la base de datos"}), 500
+
+# Ruta para mostrar los usuarios en una tabla HTML
+@app.route('/usuarios_formulario', methods=['GET'])
+def usuarios_tabla():
+    conexion = obtener_conexion()
+    if conexion:
+        cursor = conexion.cursor(dictionary=True)  # Para obtener los resultados en formato de diccionario
+        cursor.execute("SELECT * FROM usuarios")
+        usuarios = cursor.fetchall()
+        cursor.close()
+        conexion.close()
+        return render_template('usuarios_formulario.html', usuarios=usuarios)
+    else:
+        return "Error en la conexión a la base de datos", 500
+
 @app.route('/registro', methods=['GET', 'POST'])
 def registro():
-    form = RegistroForm()
-    if form.validate_on_submit():
-        nombre = form.nombre.data
-        email = form.email.data
-        password = generate_password_hash(form.password.data)
+    if request.method == 'POST':
+        nombre = request.form['nombre']
+        email = request.form['email']
+        password = request.form['password']
+        password_hash = generate_password_hash(password)
 
         conexion = obtener_conexion()
         cursor = conexion.cursor()
         cursor.execute("INSERT INTO usuarios (nombre, email, password) VALUES (%s, %s, %s)",
-                       (nombre, email, password))
+                       (nombre, email, password_hash))
         conexion.commit()
-        cursor.close()
-        conexion.close()
-
         flash('Usuario registrado correctamente')
         return redirect(url_for('login'))
-    return render_template('registro.html', form=form)
+    return render_template('registro.html')
 
-# Ruta para iniciar sesión
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    form = LoginForm()
-    if form.validate_on_submit():
-        email = form.email.data
-        password = form.password.data
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
 
         usuario = Usuario.obtener_por_email(email)
 
-        if usuario and check_password_hash(usuario.password, password):
+        if usuario and usuario.verificar_password(password):
             login_user(usuario)
             flash('Inicio de sesión exitoso')
-            return redirect(url_for('index'))
+            return redirect(url_for('productos'))  # Cambiado a la ruta de productos
         else:
             flash('Email o contraseña incorrectos')
 
-    return render_template('login.html', form=form)
+    return render_template('login.html')
 
-# Ruta para cerrar sesión
-@app.route('/logout')
-@login_required
-def logout():
-    logout_user()
-    flash('Sesión cerrada')
-    return redirect(url_for('index'))
+@app.route('/productos')
+def productos():
+    productos = Producto.obtener_todos()
+    return render_template('productos.html', productos=productos)
 
-# Ruta protegida (solo accesible si estás logueado)
-@app.route('/protegido')
-@login_required
-def protegido():
-    return f'Bienvenido, {current_user.nombre}. Esta es una página protegida.'
+@app.route('/crear', methods=['GET', 'POST'])
+def crear_producto():
+    if request.method == 'POST':
+        nombre = request.form['nombre']
+        precio = request.form['precio']
+        stock = request.form['stock']
+        if nombre and precio and stock:
+            Producto.insertar(nombre, float(precio), int(stock))
+            flash('Producto creado exitosamente.')
+            return redirect(url_for('listar_productos'))
+        else:
+            flash('Todos los campos son obligatorios.')
+    return render_template('crear_producto.html')
 
-# Función de Flask-Login para cargar un usuario
+@app.route('/productos')
+def listar_productos():
+    productos = Producto.obtener_todos()
+    return render_template('productos.html', productos=productos)
+@app.route('/editar/<int:id_producto>', methods=['GET', 'POST'])
+def editar_producto(id_producto):
+    producto = Producto.obtener_por_id(id_producto)
+    if request.method == 'POST':
+        nombre = request.form['nombre']
+        precio = request.form['precio']
+        stock = request.form['stock']
+        Producto.actualizar(id_producto, nombre, float(precio), int(stock))
+        flash('Producto actualizado correctamente.')
+        return redirect(url_for('listar_productos'))
+    return render_template('editar_producto.html', producto=producto)
+
+@app.route('/eliminar/<int:id_producto>', methods=['GET', 'POST'])
+def eliminar_producto(id_producto):
+    if request.method == 'POST':
+        Producto.eliminar(id_producto)
+        flash('Producto eliminado correctamente.')
+        return redirect(url_for('listar_productos'))
+    producto = Producto.obtener_por_id(id_producto)
+    return render_template('eliminar_producto.html.html', producto=producto)
+def insertar(nombre, precio, stock):
+    cursor = conexion.cursor()
+
+    # Obtener el id_producto más alto
+    cursor.execute("SELECT MAX(id_producto) FROM productos")
+    max_id = cursor.fetchone()[0]
+
+    # Si no hay registros, establecer id_producto en 1
+    if max_id is None:
+        nuevo_id = 1
+    else:
+        nuevo_id = max_id + 1
+
+    # Insertar el nuevo producto con el id_producto manual
+    cursor.execute(
+        "INSERT INTO productos (id_producto, nombre, precio, stock) VALUES (%s, %s, %s, %s)",
+        (nuevo_id, nombre, precio, stock)
+    )
+    conexion.commit()
+    cursor.close()
+
+
 @login_manager.user_loader
 def load_user(user_id):
     return Usuario.obtener_por_id(user_id)

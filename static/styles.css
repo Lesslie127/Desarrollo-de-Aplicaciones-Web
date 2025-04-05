@@ -1,117 +1,286 @@
-/* Estilos generales */
+/* Estilos Generales */
 body {
-    font-family: Arial, sans-serif;
-    background-color: #e0f7fa;
-    color: #0277bd;
+    background-color: #fef5e7;
+    color: #333;
+    font-family: 'Arial', sans-serif;
     margin: 0;
     padding: 0;
 }
 
-/* Encabezado */
-header {
-    background-color: #81d4fa;
-    padding: 20px;
-    text-align: center;
-}
-
+/* Estilos de encabezados */
 h1 {
-    font-size: 2.5em;
-    color: #01579b;
-}
-
-/* Barra de navegación */
-nav ul {
-    list-style-type: none;
-    padding: 0;
-}
-
-nav ul li {
-    display: inline-block;
-    margin: 0 15px;
-}
-
-nav ul li a {
-    text-decoration: none;
-    color: #0277bd;
-    font-size: 1.2em;
-}
-
-nav ul li a:hover {
-    color: #01579b;
-}
-
-/* Contenido principal */
-main {
-    padding: 20px;
+    color: #d04e7f;
+    text-align: center;
+    font-size: 36px;
 }
 
 h2 {
-    font-size: 2em;
-    color: #0288d1;
+    color: #9b4d96;
+    text-align: center;
 }
 
-/* Formulario */
-form {
-    background-color: #b3e5fc;
-    padding: 20px;
-    border-radius: 8px;
+/* Estilos para enlaces */
+a {
+    color: #d04e7f;
+    text-decoration: none;
 }
 
-label {
-    font-size: 1.2em;
-    color: #01579b;
+a:hover {
+    color: #f8a9c4;
+    text-decoration: underline;
 }
 
-input, textarea {
-    width: 100%;
-    padding: 10px;
-    margin: 10px 0;
-    border: 2px solid #0288d1;
-    border-radius: 4px;
-}
-
+/* Estilos de botones */
 button {
-    background-color: #03a9f4;
+    background-color: #d04e7f;
     color: white;
-    padding: 10px 20px;
     border: none;
-    border-radius: 4px;
+    padding: 12px 24px;
+    font-size: 16px;
     cursor: pointer;
+    border-radius: 30px;
+    transition: background-color 0.3s;
 }
 
 button:hover {
-    background-color: #0288d1;
+    background-color: #f8a9c4;
 }
 
-/* Flash messages */
-.flash {
-    padding: 10px;
-    margin: 10px 0;
-    border-radius: 4px;
+/* Estilos para formularios */
+form {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    max-width: 500px;
+    margin: 20px auto;
 }
 
-.flash.success {
-    background-color: #81c784;
-    color: white;
-}
-
-.flash.warning {
-    background-color: #ffb74d;
-    color: white;
-}
-
-/* Pie de página */
-footer {
-    background-color: #81d4fa;
-    text-align: center;
-    padding: 10px;
-    position: fixed;
-    bottom: 0;
+input[type="text"], input[type="password"], input[type="email"], textarea {
     width: 100%;
+    padding: 12px;
+    margin: 8px 0;
+    border: 1px solid #ccc;
+    border-radius: 8px;
 }
 
-footer p {
+input[type="submit"] {
+    background-color: #d04e7f;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    cursor: pointer;
+    border-radius: 30px;
+}
+
+input[type="submit"]:hover {
+    background-color: #f8a9c4;
+}
+
+/* Estilos para tablas */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+
+table, th, td {
+    border: 1px solid #e1e1e1;
+}
+
+th {
+    background-color: #d04e7f;
+    color: white;
+    padding: 12px;
+}
+
+td {
+    padding: 12px;
+    text-align: left;
+    background-color: #f8f8f8;
+}
+
+tr:nth-child(even) {
+    background-color: #f1f1f1;
+}
+
+tr:hover {
+    background-color: #f0d1d8;
+}
+
+/* Estilos para el pie de página */
+footer {
+    background-color: #333;
+    color: white;
+    padding: 20px;
+    text-align: center;
+    margin-top: 40px;
+}
+
+/* Estilos para el contenedor de la página */
+.container {
+    width: 80%;
+    margin: 0 auto;
+}
+
+/* Estilo para el encabezado principal */
+header {
+    background-color: #f8a9c4;
+    color: #ffffff;
+    padding: 40px 0;
+    text-align: center;
+}
+
+header h1 {
+    font-size: 48px;
+    font-weight: bold;
     margin: 0;
-    color: #01579b;
 }
 
+/* Estilos para las imágenes */
+img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Tarjetas de productos */
+.product-card {
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    text-align: center;
+    margin: 20px;
+    transition: transform 0.3s ease;
+}
+
+.product-card:hover {
+    transform: scale(1.05);
+}
+
+.product-card img {
+    border-radius: 10px;
+    width: 100%;
+    height: auto;
+}
+
+.product-card h3 {
+    color: #9b4d96;
+    font-size: 20px;
+    margin-top: 10px;
+}
+
+.product-card p {
+    color: #666;
+    font-size: 14px;
+    margin: 10px 0;
+}
+
+.product-card .price {
+    color: #d04e7f;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.product-card button {
+    background-color: #9b4d96;
+    border-radius: 30px;
+    padding: 10px 20px;
+    color: white;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+.product-card button:hover {
+    background-color: #d04e7f;
+}
+/* Estilos para los botones de Registro e Inicio de Sesión */
+.button-container {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.button-container .btn {
+    display: inline-block;
+    background-color: #d04e7f;
+    color: white;
+    padding: 14px 25px;
+    margin: 10px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.button-container .btn:hover {
+    background-color: #f8a9c4;
+}
+
+#btn-registro {
+    background-color: #a85b8d;
+}
+
+#btn-login {
+    background-color: #9b4d96;
+}
+/* Estilo de la tabla con colores pasteles */
+.table {
+    background-color: #f9f9f9; /* Fondo muy suave */
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.table th, .table td {
+    padding: 12px 15px;
+    text-align: center;
+}
+
+.table th {
+    background-color: #d9e2ec; /* Azul pastel suave */
+    color: #3b4c5b;
+    font-weight: bold;
+}
+
+.table tbody tr {
+    background-color: #79a0c1; /* Azul claro pastel */
+}
+
+.table tbody tr:hover {
+    background-color: #1e5370; /* Azul claro al pasar el ratón */
+}
+
+.table .btn {
+    border-radius: 5px;
+    padding: 8px 15px;
+    font-size: 14px;
+}
+
+.table .btn-primary {
+    background-color: #d68584; /* Rosa suave */
+    border: none;
+}
+
+.table .btn-warning {
+    background-color: #b379bc; /* Amarillo pastel */
+    border: none;
+}
+
+.table .btn-danger {
+    background-color: #6b58a8; /* Naranja suave */
+    border: none;
+}
+
+.table .btn-primary:hover {
+    background-color: #aa623c; /* Rosa más fuerte */
+}
+
+.table .btn-warning:hover {
+    background-color: #bc3fb2; /* Amarillo más fuerte */
+}
+
+.table .btn-danger:hover {
+    background-color: #550d7e; /* Naranja más fuerte */
+}
